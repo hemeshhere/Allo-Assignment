@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 interface Product {
   id: string;
@@ -21,6 +22,7 @@ interface Product {
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [reservingId, setReservingId] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -32,6 +34,7 @@ export default function HomePage() {
 
   async function handleReserve(productId: string, warehouseId: string) {
     try {
+      setReservingId(warehouseId);
       // Generate a unique ID for this specific click
       const idempotencyKey = crypto.randomUUID();
 
@@ -57,6 +60,7 @@ export default function HomePage() {
       // Redirect to the checkout page with the reservation ID
       router.push(`/checkout/${data.id}`);
     } catch (error) {
+      setReservingId(null);
       toast.error("Failed to reserve product.");
     }
   }
@@ -82,10 +86,20 @@ export default function HomePage() {
                   </div>
                   <Button 
                     size="sm" 
-                    disabled={inv.available === 0}
+                    disabled={inv.available === 0 || reservingId === inv.warehouseId}
                     onClick={() => handleReserve(product.id, inv.warehouseId)}
+                    className="w-[100px]" 
                   >
-                    {inv.available === 0 ? "Out of Stock" : "Reserve"}
+                    {reservingId === inv.warehouseId ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Wait
+                      </>
+                    ) : inv.available === 0 ? (
+                      "Out of Stock"
+                    ) : (
+                      "Reserve"
+                    )}
                   </Button>
                 </div>
               ))}

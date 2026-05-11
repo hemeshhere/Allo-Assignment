@@ -3,11 +3,12 @@ import { NextResponse } from 'next/server';
 
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }>}
 ) {
   try {
+    const { id } = await params;
     const reservation = await prisma.reservation.findUnique({
-      where: { id: params.id }
+      where: { id:id }
     });
 
     if (!reservation || reservation.status !== 'PENDING') {
@@ -20,7 +21,7 @@ export async function POST(
     }
 
     const updated = await prisma.reservation.update({
-      where: { id: params.id },
+      where: { id:id },
       data: { status: 'CONFIRMED' }
     });
 
