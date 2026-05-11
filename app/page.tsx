@@ -32,8 +32,15 @@ export default function HomePage() {
 
   async function handleReserve(productId: string, warehouseId: string) {
     try {
+      // Generate a unique ID for this specific click
+      const idempotencyKey = crypto.randomUUID();
+
       const res = await fetch("/api/reservations", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key": idempotencyKey // <-- Send it to the API
+        },
         body: JSON.stringify({ productId, warehouseId, quantity: 1 }),
       });
 
