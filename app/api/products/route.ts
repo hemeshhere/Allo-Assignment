@@ -5,9 +5,13 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   const products = await prisma.product.findMany({
     include: {
-      stocks: { include: { warehouse: true } },
+      stocks: { 
+        include: { warehouse: true } 
+      },
       reservations: {
-        where: { status: { in: ['PENDING', 'CONFIRMED'] } }
+        where: { 
+          status: { in: ['PENDING', 'CONFIRMED'] } 
+        }
       }
     }
   });
@@ -18,8 +22,8 @@ export async function GET() {
     price: p.price,
     inventory: p.stocks.map((s:any) => {
       const reserved = p.reservations
-        .filter((r:any) => r.warehouseId === s.warehouseId)
-        .reduce((sum: number, r:any) => sum + r.quantity, 0);
+        .filter((r:any) =>r.warehouseId === s.warehouseId)
+        .reduce((sum: number, r:any) =>sum + r.quantity, 0);
       return {
         warehouse: s.warehouse.name,
         warehouseId: s.warehouseId,

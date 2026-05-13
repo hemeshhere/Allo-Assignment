@@ -111,7 +111,7 @@ export default function HomePage() {
               size="sm" 
               disabled={inv.available === 0 || reservingId !== null}
               onClick={() => handleReserve(product.id, inv.warehouseId)}
-              className={`w-[115px] py-5 font-semibold tracking-wide transition-all rounded-xl ${
+              className={`w-28.75 py-5 font-semibold tracking-wide transition-all rounded-xl ${
                 inv.available > 0 
                   ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_15px_rgba(37,99,235,0.2)] hover:shadow-[0_0_25px_rgba(59,130,246,0.4)]' 
                   : 'bg-zinc-800/80 text-zinc-500'
@@ -146,7 +146,7 @@ export default function HomePage() {
           <div className="bg-blue-500/10 p-2 rounded-xl border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.15)]">
             <Package className="h-6 w-6 text-blue-400" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-slate-100 to-slate-400 bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold tracking-tight bg-linear-to-r from-slate-100 to-slate-400 bg-clip-text text-transparent">
             Allo Logistics
           </h1>
         </div>
@@ -172,15 +172,12 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => (
               <div key={product.id} className="relative">
-                {/* The standard grid card */}
                 <motion.div
                   layoutId={`card-${product.id}`}
                   className={`bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden backdrop-blur-sm group hover:border-blue-500/30 hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)] ${expandedProductId === product.id ? 'opacity-0' : 'opacity-100'}`}
                 >
                   <ProductCardContent product={product} />
                 </motion.div>
-
-                {/* The Expanded "Hero" Card (Renders conditionally over everything) */}
                 <AnimatePresence>
                   {expandedProductId === product.id && (
                     <motion.div
@@ -191,8 +188,6 @@ export default function HomePage() {
                       transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                     >
                       <ProductCardContent product={product} isExpanded={true} />
-                      
-                      {/* Loading Bar at the bottom to show progress */}
                       <motion.div 
                         initial={{ width: "0%" }}
                         animate={{ width: "100%" }}

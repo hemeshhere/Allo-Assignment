@@ -12,12 +12,18 @@ export async function POST(
     });
 
     if (!reservation || reservation.status !== 'PENDING') {
-      return NextResponse.json({ error: 'Reservation not found or already processed' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Reservation not found or already processed' }, 
+        { status: 404 }
+      );
     }
 
     // Double-check expiration just to be safe
     if (new Date() > new Date(reservation.expiresAt)) {
-      return NextResponse.json({ error: 'Reservation expired' }, { status: 410 });
+      return NextResponse.json(
+        { error: 'Reservation expired' }, 
+        { status: 410 }
+      );
     }
 
     const updated = await prisma.reservation.update({
@@ -26,7 +32,11 @@ export async function POST(
     });
 
     return NextResponse.json(updated);
-  } catch (error) {
-    return NextResponse.json({ error: 'Confirmation failed' }, { status: 500 });
+  } 
+  catch (error) {
+    return NextResponse.json(
+      { error: 'Confirmation failed' }, 
+      { status: 500 }
+    );
   }
 }

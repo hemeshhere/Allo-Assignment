@@ -12,7 +12,11 @@ export async function POST(
       data: { status: 'RELEASED' }
     });
     return NextResponse.json(updated);
-  } catch (error) {
-    return NextResponse.json({ error: 'Could not release reservation' }, { status: 500 });
+  } 
+  catch (error) {
+    return NextResponse.json(
+      { error: 'Could not release reservation' }, 
+      { status: 500 }
+    );
   }
 }

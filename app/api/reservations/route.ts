@@ -60,10 +60,17 @@ export async function POST(req: Request) {
 
     return NextResponse.json(result, { status: 201 });
 
-  } catch (error: any) {
+  } 
+  catch (error: any) {
     if (error.message === 'INSUFFICIENT_STOCK') {
-      return NextResponse.json({ error: 'Not enough stock available' }, { status: 409 });
+      return NextResponse.json(
+        { error: 'Not enough stock available' }, 
+        { status: 409 }
+      );
     }
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' }, 
+      { status: 500 }
+    );
   }
 }
